@@ -23,37 +23,36 @@ public class ProdutoService {
 
     public ProdutoResponse save(ProdutoRequest request) {
 
-        Produto produto = produtoMapper.toEntity(request);
-
         Categoria categoria = categoriaRepository.findById(request.categoriaId())
                 .orElseThrow();
 
-        produto.setCategoria(categoria);
+        Produto produto = produtoMapper.toEntity(
+                request,
+                categoria
+        );
 
         Produto produtoSalvo = produtoRepository.save(produto);
 
         return produtoMapper.toResponse(produtoSalvo);
-
     }
 
-    public List<ProdutoResponse> findAll () {
-
+    public List<ProdutoResponse> findAll() {
 
         return produtoRepository.findAll()
                 .stream()
-                .map(produtoMapper :: toResponse)
+                .map(produtoMapper::toResponse)
                 .toList();
     }
+
     public ProdutoResponse findById(Long id) {
 
         Produto produto = produtoRepository.findById(id)
                 .orElseThrow();
 
         return produtoMapper.toResponse(produto);
-
     }
 
-    public ProdutoResponse update (Long id , ProdutoRequest request) {
+    public ProdutoResponse update(Long id, ProdutoRequest request) {
 
         Produto produto = produtoRepository.findById(id)
                 .orElseThrow();
@@ -61,17 +60,19 @@ public class ProdutoService {
         Categoria categoria = categoriaRepository.findById(request.categoriaId())
                 .orElseThrow();
 
-        produtoMapper.updateEntity(request , produto);
-
-        produto.setCategoria(categoria);
+        produtoMapper.updateEntity(
+                request,
+                produto,
+                categoria
+        );
 
         Produto produtoSalvo = produtoRepository.save(produto);
 
         return produtoMapper.toResponse(produtoSalvo);
-
     }
 
-    public void delete (Long id) {
+    public void delete(Long id) {
+
         produtoRepository.deleteById(id);
     }
 }

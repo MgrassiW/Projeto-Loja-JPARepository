@@ -10,10 +10,9 @@ public class CategoriaMapper {
 
     public Categoria toEntity(CategoriaRequest request) {
 
-        return new Categoria(
-                null,
-                request.nome()
-        );
+        return Categoria.builder()
+                .nome(request.nome())
+                .build();
     }
 
     public CategoriaResponse toResponse(Categoria categoria) {

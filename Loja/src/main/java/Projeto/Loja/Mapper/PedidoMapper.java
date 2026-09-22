@@ -5,18 +5,21 @@ import Projeto.Loja.DTO.PedidoRequest;
 import Projeto.Loja.DTO.PedidoResponse;
 import Projeto.Loja.Entity.Cliente;
 import Projeto.Loja.Entity.Pedido;
+import Projeto.Loja.Entity.Produto;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
 
 @Component
 public class PedidoMapper {
 
-    public Pedido toEntity(PedidoRequest request) {
+    public Pedido toEntity(PedidoRequest request , Cliente cliente) {
 
-        Pedido pedido = new Pedido();
-
-        pedido.setStatus(request.status());
-
-        return pedido;
+        return Pedido.builder()
+                .cliente(cliente)
+                .status(request.status())
+                .dataPedido(LocalDateTime.now())
+                .build();
     }
 
     public PedidoResponse toResponse (Pedido pedido) {
@@ -33,12 +36,12 @@ public class PedidoMapper {
                 cliente,
                 pedido.getDataPedido(),
                 pedido.getStatus()
-
         );
     }
 
-    public void updateEntity(PedidoRequest request , Pedido pedido) {
+    public void updateEntity(PedidoRequest request, Pedido pedido, Cliente cliente) {
 
+        pedido.setCliente(cliente);
         pedido.setStatus(request.status());
     }
 }

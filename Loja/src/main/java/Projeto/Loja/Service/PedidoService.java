@@ -22,29 +22,27 @@ public class PedidoService {
 
     public PedidoResponse save(PedidoRequest request) {
 
-        Pedido pedido = pedidoMapper.toEntity(request);
-
         Cliente cliente = clienteRepository.findById(request.clienteId())
                 .orElseThrow();
 
-        pedido.setCliente(cliente);
+        Pedido pedido = pedidoMapper.toEntity(
+                request,
+                cliente
+        );
 
         Pedido pedidoSalvo = pedidoRepository.save(pedido);
 
         return pedidoMapper.toResponse(pedidoSalvo);
-
     }
 
-    public List<PedidoResponse> findAll () {
-
-        List<Pedido> lista = pedidoRepository.findAll();
-
+    public List<PedidoResponse> findAll() {
 
         return pedidoRepository.findAll()
                 .stream()
-                .map(pedidoMapper :: toResponse)
+                .map(pedidoMapper::toResponse)
                 .toList();
     }
+
     public PedidoResponse findById(Long id) {
 
         Pedido pedido = pedidoRepository.findById(id)
@@ -53,24 +51,26 @@ public class PedidoService {
         return pedidoMapper.toResponse(pedido);
     }
 
-    public PedidoResponse update (Long id , PedidoRequest request) {
+    public PedidoResponse update(Long id, PedidoRequest request) {
 
         Pedido pedido = pedidoRepository.findById(id)
-                        .orElseThrow();
+                .orElseThrow();
 
         Cliente cliente = clienteRepository.findById(request.clienteId())
-                        .orElseThrow();
+                .orElseThrow();
 
-        pedidoMapper.updateEntity(request , pedido);
-
-        pedido.setCliente(cliente);
+        pedidoMapper.updateEntity(
+                request,
+                pedido,
+                cliente
+        );
 
         Pedido pedidoSalvo = pedidoRepository.save(pedido);
 
         return pedidoMapper.toResponse(pedidoSalvo);
     }
 
-    public void delete (Long id) {
+    public void delete(Long id) {
 
         pedidoRepository.deleteById(id);
     }

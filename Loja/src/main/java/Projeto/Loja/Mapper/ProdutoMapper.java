@@ -3,21 +3,21 @@ package Projeto.Loja.Mapper;
 import Projeto.Loja.DTO.CategoriaResponse;
 import Projeto.Loja.DTO.ProdutoRequest;
 import Projeto.Loja.DTO.ProdutoResponse;
+import Projeto.Loja.Entity.Categoria;
 import Projeto.Loja.Entity.Produto;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ProdutoMapper {
 
-    public Produto toEntity(ProdutoRequest request) {
+    public Produto toEntity(ProdutoRequest request , Categoria categoria) {
 
-        Produto produto = new Produto();
-
-        produto.setNome(request.nome());
-        produto.setPreco(request.preco());
-        produto.setEstoque(request.estoque());
-
-        return produto;
+        return Produto.builder()
+                .nome(request.nome())
+                .preco(request.preco())
+                .estoque(request.estoque())
+                .categoria(categoria)
+                .build();
     }
 
     public ProdutoResponse toResponse(Produto produto) {
@@ -36,10 +36,11 @@ public class ProdutoMapper {
         );
     }
 
-    public void updateEntity (ProdutoRequest request , Produto produto) {
+    public void updateEntity(ProdutoRequest request, Produto produto, Categoria categoria) {
 
         produto.setNome(request.nome());
         produto.setPreco(request.preco());
         produto.setEstoque(request.estoque());
+        produto.setCategoria(categoria);
     }
 }
